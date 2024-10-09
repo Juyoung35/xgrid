@@ -37,4 +37,5 @@ struct Rect {
 enum Expr {
     Bool,
     Int,
+    HaveEq(Where, Symbol, Num),
 }
