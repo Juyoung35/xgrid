@@ -33,3 +33,8 @@ struct Rect {
     x1: Num,
     y1: Num,
 }
+
+enum Expr {
+    Bool,
+    Int,
+}
