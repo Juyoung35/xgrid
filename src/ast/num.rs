@@ -1,3 +1,4 @@
+use super::GameBoard;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -56,17 +57,17 @@ impl Num {
             _ => self.clone(),
         }
     }
-    pub fn post_eval(&self, context: &BoardContext) -> isize {
+    pub fn post_eval(&self, board: &GameBoard) -> isize {
         match self {
             Self::Value(operand) => *operand,
-            Self::PostValue(operand) => operand.post_eval(context),
+            Self::PostValue(operand) => operand.post_eval(board),
             Self::Oper(op) => {
                 match op {
-                    Operator::Neg(operand) => -operand.post_eval(context),
-                    Operator::Add(lhs, rhs) => lhs.post_eval(context) + rhs.post_eval(context),
-                    Operator::Sub(lhs, rhs) => lhs.post_eval(context) - rhs.post_eval(context),
-                    Operator::Mul(lhs, rhs) => lhs.post_eval(context) * rhs.post_eval(context),
-                    Operator::Div(lhs, rhs) => lhs.post_eval(context) / rhs.post_eval(context),
+                    Operator::Neg(operand) => -operand.post_eval(board),
+                    Operator::Add(lhs, rhs) => lhs.post_eval(board) + rhs.post_eval(board),
+                    Operator::Sub(lhs, rhs) => lhs.post_eval(board) - rhs.post_eval(board),
+                    Operator::Mul(lhs, rhs) => lhs.post_eval(board) * rhs.post_eval(board),
+                    Operator::Div(lhs, rhs) => lhs.post_eval(board) / rhs.post_eval(board),
                 }
             },
         }
@@ -74,7 +75,7 @@ impl Num {
 }
 
 #[derive(Clone, Copy, Debug, Default)]
-pub struct BoardContext {
+pub struct Boardboard {
     width: usize,
     height: usize,
 }
@@ -83,17 +84,17 @@ pub struct BoardContext {
 pub enum PostValue {
     Width,
     Height,
-    ArgOf {
-        symbol: String,
-        index: usize,
-    },
+    // ArgOf {
+    //     symbol: String,
+    //     index: usize,
+    // },
 }
 impl PostValue {
-    pub fn post_eval(&self, context: &BoardContext) -> isize {
+    pub fn post_eval(&self, board: &GameBoard) -> isize {
         match self {
-            Self::Width => context.width as isize,
-            Self::Height => context.height as isize,
-            Self::ArgOf { symbol, index } => {},
+            Self::Width => board.width as isize,
+            Self::Height => board.height as isize,
+            // Self::ArgOf { symbol, index } => board.config.symbols.get(&symbol),
         }
     }
 }
