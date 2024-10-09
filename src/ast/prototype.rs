@@ -38,7 +38,7 @@ enum StaticSpatial {
 }
 
 enum DynamicSpatial {
-    TakeWhile(Box<DynamicSpatial>, Boolean),
+    TakeWhile(Box<DynamicSpatial>, Box<Boolean>),
     WkSquare,
     WkPlus,
     WkCross,
@@ -55,12 +55,12 @@ enum DynamicSpatial {
 struct Symbol;
 
 enum BoolFunc {
-    HaveEq(Spatials, Symbol, Numeral),
-    PairEq(Spatials, Symbol, Numeral),
+    HaveEq(Spatials, Symbol, Box<Numeral>),
+    PairEq(Spatials, Symbol, Box<Numeral>),
 }
 
 enum NumFunc {
-    CountOf(Spatial, Symbol),
+    CountOf(Spatials, Symbol),
 }
 
 enum Expr {
