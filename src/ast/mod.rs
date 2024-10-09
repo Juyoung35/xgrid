@@ -1,5 +1,6 @@
 mod builders;
 mod num;
+mod prototype;
 
 pub use num::Num;
 use std::collections::HashMap;
