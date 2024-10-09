@@ -1,0 +1,11 @@
+expr = unary(expr) | binary(expr, expr) | bool;
+unary = neg;
+binary = add | sub | mul | div;
+bool = true | false;
+expr = num;
+eq(expr, expr);
+ge(num, num);
+not(bool)
+neg(num)
+and(bool, bool)
+or(bool, bool)
