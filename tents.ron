@@ -15,14 +15,47 @@
             ],
         ),
         (
-            type: ExtCell(Rect(-1, 0, -1, )),
+            type: CellDefault,
+            name: "Empty",
+        ),
+        (
+            type: CellMarker,
+            name: "Marker",
+        ),
+        (
+            type: CellExt(Rect(-1, 0, -1, Sub(Height, 1))),
             name: "RowClue",
-        )
+            args: [
+                CountOf(Row, "Tent"),
+            ],
+            cs: [
+                HaveEq(Row, "Tent", Args(0)),
+            ],
+        ),
+        (
+            template: ColFromRow("RowClue"),
+            name: "ColumnClue",
+        ),
     ],
     fullgen: [
-
+        "Tent",
+        "Tree",
+        "RowClue",
+        "ColumnClue",
     ],
     reduce: [
-
+    ],
+    solve: [
+    ],
+)
+(
+    symbols: [
+        (
+            type: Cell,
+            name: "Light",
+            cs: [
+                
+            ],
+        )
     ],
 )
