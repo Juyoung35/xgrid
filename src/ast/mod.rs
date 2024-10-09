@@ -1,6 +1,8 @@
 mod builders;
 mod num;
 
+pub use num::Num;
+
 struct GameConfig {
     name: String,
     symbols: Vec<Symbol>,

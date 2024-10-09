@@ -1,51 +1,91 @@
+#[derive(Clone, Debug)]
 pub enum Operator {
-    Add,
-    Sub,
-    Mul,
-    Div,
-    Neg,
+    Neg(Box<Num>),
+    Add(Box<Num>, Box<Num>),
+    Sub(Box<Num>, Box<Num>),
+    Mul(Box<Num>, Box<Num>),
+    Div(Box<Num>, Box<Num>),
 }
 
+#[derive(Clone, Debug)]
 pub enum Num {
     Value(isize),
-    UnaryExpr {
-        op: Operator,
-        child: Box<Num>,
-    },
-    BinaryExpr {
-        op: Operator,
-        lhs: Box<Num>,
-        rhs: Box<Num>,
-    },
+    Oper(Operator),
     PostValue(PostValue),
 }
 impl Num {
-    pub fn pre_eval(&self, node: &Self) -> Self {
-        match node {
-            Self::UnaryExpr { op, child } => {
-                let child = self.pre_eval(child);
+    pub fn pre_eval(&self) -> Self {
+        match self {
+            Self::Oper(op) => {
                 match op {
-                    Operator::Neg => -child,
-                    _ => child,
+                    Operator::Neg(child) => {
+                        match child.pre_eval() {
+                            Self::Value(operand) => Self::Value(-operand),
+                            _ => self.clone(),
+                        }
+                    },
+                    Operator::Add(lchild, rchild) => {
+                        match (lchild.pre_eval(), rchild.pre_eval()) {
+                            (Self::Value(lhs), Self::Value(rhs)) => Self::Value(lhs + rhs),
+                            _ => self.clone(),
+                        }
+                    },
+                    Operator::Sub(lchild, rchild) => {
+                        match (lchild.pre_eval(), rchild.pre_eval()) {
+                            (Self::Value(lhs), Self::Value(rhs)) => Self::Value(lhs - rhs),
+                            _ => self.clone(),
+                        }
+                    },
+                    Operator::Mul(lchild, rchild) => {
+                        match (lchild.pre_eval(), rchild.pre_eval()) {
+                            (Self::Value(lhs), Self::Value(rhs)) => Self::Value(lhs * rhs),
+                            _ => self.clone(),
+                        }
+                    },
+                    Operator::Div(lchild, rchild) => {
+                        match (lchild.pre_eval(), rchild.pre_eval()) {
+                            (Self::Value(lhs), Self::Value(rhs)) => Self::Value(lhs / rhs),
+                            _ => self.clone(),
+                        }
+                    },
                 }
             },
-            Self::BinaryExpr { op, lhs, rhs } => {
-                let lhs_ret = self.pre_eval(lhs);
-                let rhs_ret = self.pre_eval(rhs);
-
+            _ => self.clone(),
+        }
+    }
+    pub fn post_eval(&self, context: &BoardContext) -> isize {
+        match self {
+            Self::Value(operand) => *operand,
+            Self::PostValue(operand) => operand.post_eval(context),
+            Self::Oper(op) => {
                 match op {
-                    Operator::Add => lhs_ret + rhs_ret,
-                    Operator::Sub => lhs_ret - rhs_ret,
-                    Operator::Mul => lhs_ret * rhs_ret,
-                    Operator::Div => lhs_ret / rhs_ret,
+                    Operator::Neg(operand) => -operand.post_eval(context),
+                    Operator::Add(lhs, rhs) => lhs.post_eval(context) + rhs.post_eval(context),
+                    Operator::Sub(lhs, rhs) => lhs.post_eval(context) - rhs.post_eval(context),
+                    Operator::Mul(lhs, rhs) => lhs.post_eval(context) * rhs.post_eval(context),
+                    Operator::Div(lhs, rhs) => lhs.post_eval(context) / rhs.post_eval(context),
                 }
             },
-            other => other,
         }
     }
 }
 
+#[derive(Clone, Copy, Debug, Default)]
+pub struct BoardContext {
+    width: usize,
+    height: usize,
+}
+
+#[derive(Clone, Copy, Debug)]
 pub enum PostValue {
     Width,
     Height,
+}
+impl PostValue {
+    pub fn post_eval(&self, context: &BoardContext) -> isize {
+        match self {
+            Self::Width => context.width as isize,
+            Self::Height => context.height as isize,
+        }
+    }
 }
