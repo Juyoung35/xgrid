@@ -1,0 +1,28 @@
+(
+    symbols: [
+        (
+            type: Cell,
+            name: "Tent",
+            cs: [
+                Not(HaveGE(Square(1), "Tent", 1)),
+            ],
+        ),
+        (
+            type: Cell,
+            name: "Tree",
+            cs: [
+                PairEq(Plus, "Tent", 1),
+            ],
+        ),
+        (
+            type: ExtCell(Rect(-1, 0, -1, )),
+            name: "RowClue",
+        )
+    ],
+    fullgen: [
+
+    ],
+    reduce: [
+
+    ],
+)
