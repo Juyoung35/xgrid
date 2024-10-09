@@ -1,4 +1,6 @@
-#[derive(Clone, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub enum Operator {
     Neg(Box<Num>),
     Add(Box<Num>, Box<Num>),
@@ -7,7 +9,8 @@ pub enum Operator {
     Div(Box<Num>, Box<Num>),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
+#[serde(untagged)]
 pub enum Num {
     Value(isize),
     Oper(Operator),
@@ -76,16 +79,21 @@ pub struct BoardContext {
     height: usize,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub enum PostValue {
     Width,
     Height,
+    ArgOf {
+        symbol: String,
+        index: usize,
+    },
 }
 impl PostValue {
     pub fn post_eval(&self, context: &BoardContext) -> isize {
         match self {
             Self::Width => context.width as isize,
             Self::Height => context.height as isize,
+            Self::ArgOf { symbol, index } => {},
         }
     }
 }
