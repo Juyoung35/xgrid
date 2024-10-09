@@ -27,11 +27,11 @@ pub const ORTHOGONAL: Vectors = &[
 pub const DIAGONAL: Vectors = &[
     NORTH_EAST, NORTH_WEST, SOUTH_WEST, SOUTH_EAST,
 ];
-pub const HOLLOW_SQUARE: Vectors = vec_concat!(
+pub const SQUARE: Vectors = vec_concat!(
     ORTHOGONAL, DIAGONAL,
 );
 pub const FULL_SQUARE: Vectors = vec_concat!(
-    [ORIGIN], HOLLOW_SQUARE,
+    [ORIGIN], SQUARE,
 );
 
 pub type Point = Vector2<usize>;
