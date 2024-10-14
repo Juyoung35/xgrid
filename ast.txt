@@ -85,6 +85,8 @@ enum DynamicNumeral {
     Square(Numeral),
     Cube(Numeral),
     Quad(Numeral),
+
+    CountOf(Symbol, Spatials),
 }
 #[serde(untagged)]
 enum Spatials {

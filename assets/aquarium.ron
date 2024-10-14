@@ -1,0 +1,22 @@
+(name: "Aquarium",
+    plugins: Coloring(shaded: "Water"),
+    elements: [
+        Region,
+        UnShaded,
+        Shaded (name: "Water",
+            cs: Eq(TakeWhileWith(
+                TakeWhile(Horizontal, InRegion(Origin)), South, InRegion(Origin)
+            ), Self),
+        ),
+        RowClue(count: "Water"),
+        ColumnClue(count: "Water"),
+        Flag,
+    ],
+    gen: [
+        Region,
+        Default(UnShaded),
+        "Water",
+        RowClue,
+        ColumnClue,
+    ]
+)

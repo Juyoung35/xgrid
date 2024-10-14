@@ -8,8 +8,8 @@
         Cell (name: "Tree",
             cs: PairEq(Plus(1), "Tent", 1),
         ),
-        RowClue(CountOf("Tent")),
-        ColumnClue(CountOf("Tent")),
+        RowClue(CountOf("Tent", Row(Origin))),
+        ColumnClue(CountOf("Tent", Column(Origin))),
         Flag,
     ],
     gen: [
