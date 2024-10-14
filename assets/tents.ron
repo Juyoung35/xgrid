@@ -1,0 +1,22 @@
+(name: "Tents",
+    plugins: Coloring(shaded: "Tent"),
+    elements: [
+        UnShaded,
+        Shaded (name: "Tent",
+            cs: HaveEq(Square(1), Self, 0),
+        ),
+        Cell (name: "Tree",
+            cs: PairEq(Plus(1), "Tent", 1),
+        ),
+        RowClue(CountOf("Tent")),
+        ColumnClue(CountOf("Tent")),
+        Flag,
+    ],
+    gen: [
+        Default(UnShaded),
+        Shaded,
+        "Tree",
+        RowClue,
+        ColumnClue,
+    ],
+)

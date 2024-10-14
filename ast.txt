@@ -86,10 +86,37 @@ enum DynamicNumeral {
     Cube(Numeral),
     Quad(Numeral),
 }
+#[serde(untagged)]
+enum Spatials {
+    SpatialFromOrigin(SpatialFromOrigin),
+    Traversal(Traversal),
+    DynamicSpatials(Box<DynamicSpatials>),
+    ContextSpatials(Box<ContextSpatials>),
+}
+enum DynamicSpatials {
+    
+    Union(Spatials, Spatials),
+    Intersect(Spatials, Spatials),
+    Difference(Spatials, Spatials),
+}
+enum ContextSpatials {
+    Complement(Spatials),
+}
 enum Traversal {
     East,
     NorthEast,
     North,
+    NorthWest,
+    West,
+    SouthWest,
+    South,
+    SouthEast,
+
+    Horizontal,
+    Vertical,
+    Rook,
+    Bishop,
+    Queen,
 }
 enum SpatialFromOrigin {
     Square(Numerals),
