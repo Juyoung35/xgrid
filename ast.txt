@@ -1,5 +1,112 @@
+#[repr(u32)]
+pub enum AstKind {
+    Numeral,
+    App,
+    Var,
+    Quantifier,
+    Sort,
+    FuncDecl,
+    Unknown,
+}
+
+#[repr(u32)]
+pub enum SortKind {
+    Uninterpreted,
+    Bool,
+    Int,
+    Real,
+    BV,
+    Array,
+    Datatype,
+    Relation,
+    FiniteDomain,
+    FloatingPoint,
+    RoundingMode,
+    Seq,
+    RE,
+    Unknown,
+}
+
+// z3::ast::Set, RegExp, Dynamic ?
+
+enum DataType {
+    Boolean(Boolean),
+    Numeral(Numeral),
+}
+
+#[serde(untagged)]
 enum Boolean {
     Literal(bool),
-    And(Box<Boolean>, Box<Boolean>),
-    Or(Box<Boolean>, Box<Boolean>),
+    Dynamic(Box<DynamicBoolean>),
+}
+enum DynamicBoolean {
+    Not(Boolean),
+    And(Boolean, Boolean),
+    Or(Boolean, Boolean),
+    Xor(Boolean, Boolean),
+    Iff(Boolean, Boolean),
+    Implies(Boolean, Boolean),
+    PbLe(Vec<Boolean, Numeral>, Numeral),
+    PbGe(Vec<Boolean, Numeral>, Numeral),
+    PbEq(Vec<Boolean, Numeral>, Numeral),
+
+    Ge(Numeral, Numeral),
+    Gt(Numeral, Numeral),
+    Le(Numeral, Numeral),
+    Lt(Numeral, Numeral),
+
+    Eq(DataType, DataType),
+}
+#[serde(untagged)]
+enum Numeral {
+    Literal(isize),
+    ContextNumeral(ContextNumeral)
+    Dynamic(Box<DynamicNumeral>),
+}
+enum ContextNumeral {
+    Width,
+    Height,
+    Poly,
+}
+enum DynamicNumeral {
+    Neg(Numeral),
+    Add(Numeral, Numeral),
+    Sub(Numeral, Numeral),
+    Mul(Numeral, Numeral),
+    Div(Numeral, Numeral),
+    Modulo(Numeral, Numeral),
+    Power(Numeral, Numeral),
+    Rem(Numeral, Numeral),
+
+    Half(Numeral),
+    Double(Numeral),
+    // Inverse(Numeral),
+    Sqrt(Numeral),
+    Square(Numeral),
+    Cube(Numeral),
+    Quad(Numeral),
+}
+enum Traversal {
+    East,
+    NorthEast,
+    North,
+}
+enum SpatialFromOrigin {
+    Square(Numerals),
+    Cross(Numerals),
+    Plus(Numerals),
+    Right(Numerals),
+    RightUp(Numerals),
+    Up(Numerals),
+    LeftUp(Numerals),
+    Left(Numerals),
+    LeftDown(Numerals),
+    Down(Numerals),
+    RightDown(Numerals),    
+}
+#[serde(untagged)]
+enum Numerals {
+    Single(Numeral),
+    Multi(Vec<Box<Numerals>>),
+    Range(Numeral, Numeral),
 }
